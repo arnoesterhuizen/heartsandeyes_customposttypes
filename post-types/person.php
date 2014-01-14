@@ -1,7 +1,7 @@
 <?php
 if(!class_exists('Person'))
 {
-	require_once('custom_post_type.php');
+	require_once(sprintf("%s/custom_post_type.php", dirname(__FILE__)));
 	/**
 	 * A Person class that provides 3 additional meta fields
 	 */
