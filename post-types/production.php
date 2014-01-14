@@ -2,17 +2,18 @@
 if(!class_exists('Production'))
 {
 	/**
-	 * A Production class that provides 3 additional meta fields
-	 */
+   * A Production class that provides 3 additional meta fields
+   */
 	class Production
 	{
-		const POST_TYPE	       = "production";
-		const POST_TYPE_PLURAL = "productions";
-		private $_meta         = array();
+		const POST_TYPE          = "production";
+		const POST_TYPE_PLURAL   = "productions";
+		protected $_meta         = array();
+		protected $_taxonomies   = array();
 
 		/**
-		 * The Constructor
-		 */
+     * The Constructor
+     */
 		public function __construct()
 		{
 			// register actions
@@ -23,8 +24,8 @@ if(!class_exists('Production'))
 		} // END public function __construct()
 
 		/**
-		 * hook into WP's init action hook
-		 */
+     * hook into WP's init action hook
+     */
 		public function init()
 		{
 			// Initialize Post Type
@@ -34,31 +35,31 @@ if(!class_exists('Production'))
 		} // END public function init()
 
 		/**
-		 * Create the post type
-		 */
+     * Create the post type
+     */
 		public function create_post_type()
 		{
 			$labels = array(
-				'name'               => __(ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL))),
-				'singular_name'      => __(ucwords(str_replace("_", " ", self::POST_TYPE)))
-				'menu_name'	         => __(ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL))),
-				'parent_item_colon'	 => __( '' ),
-				'all_items'	         => __(sprintf('All %s', ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL)))),
-				'view_item'	         => __(sprintf('View %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
-				'add_new_item'       => __(sprintf('Add New %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
-				'add_new'            => __( 'Add New' ),
-				'edit_item'          => __(sprintf('Edit %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
-				'update_item'        => __(sprintf('Update %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
-				'search_items'       => __(sprintf('Search %s', ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL)))),
-				'not_found'          => __(sprintf('No %s found', str_replace("_", " ", self::POST_TYPE_PLURAL))),
-				'not_found_in_trash' => __(sprintf('No %s found in Trash', str_replace("_", " ", self::POST_TYPE_PLURAL)))
+				'name'                => __(ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL))),
+				'singular_name'       => __(ucwords(str_replace("_", " ", self::POST_TYPE)))
+				'menu_name'           => __(ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL))),
+				'parent_item_colon'   => __( '' ),
+				'all_items'           => __(sprintf('All %s', ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL)))),
+				'view_item'           => __(sprintf('View %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
+				'add_new_item'        => __(sprintf('Add New %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
+				'add_new'             => __( 'Add New' ),
+				'edit_item'           => __(sprintf('Edit %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
+				'update_item'         => __(sprintf('Update %s', ucwords(str_replace("_", " ", self::POST_TYPE)))),
+				'search_items'        => __(sprintf('Search %s', ucwords(str_replace("_", " ", self::POST_TYPE_PLURAL)))),
+				'not_found'           => __(sprintf('No %s found', str_replace("_", " ", self::POST_TYPE_PLURAL))),
+				'not_found_in_trash'  => __(sprintf('No %s found in Trash', str_replace("_", " ", self::POST_TYPE_PLURAL)))
 			);
 
 			$rewrite = array(
-				'slug'               => self::POST_TYPE_PLURAL,
-				'with_front'         => true,
-				'pages'              => true,
-				'feeds'              => true,
+				'slug'                => self::POST_TYPE_PLURAL,
+				'with_front'          => true,
+				'pages'               => true,
+				'feeds'              	=> true,
 			);
 
 			$args = array(
@@ -70,6 +71,7 @@ if(!class_exists('Production'))
 				'menu_icon'           => 'dashicons-exerpt-view',
 				'can_export'          => true,
 				'has_archive'         => true,
+				'taxonomies'          => $this->_taxonomies,
 				'public'              => true,
 				'rewrite'             => $rewrite,
 				'capability_type'     => 'page',
@@ -79,14 +81,14 @@ if(!class_exists('Production'))
 		}
 
 		/**
-		 * Create taxonomies
-		 */
+     * Create taxonomies
+     */
 		public function create_taxonomies() {
 		} // END public function create_taxonomies()
 
 		/**
-		 * Save the metaboxes for this custom post type
-		 */
+     * Save the metaboxes for this custom post type
+     */
 		public function save_post($post_id)
 		{
 			// verify if this is an auto save routine.
@@ -111,8 +113,8 @@ if(!class_exists('Production'))
 		} // END public function save_post($post_id)
 
 		/**
-		 * hook into WP's admin_init action hook
-		 */
+     * hook into WP's admin_init action hook
+     */
 		public function admin_init()
 		{
 			// Add metaboxes
@@ -120,8 +122,8 @@ if(!class_exists('Production'))
 		} // END public function admin_init()
 
 		/**
-		 * hook into WP's add_meta_boxes action hook
-		 */
+     * hook into WP's add_meta_boxes action hook
+     */
 		public function add_meta_boxes()
 		{
 			// Add this metabox to every selected post
@@ -134,8 +136,8 @@ if(!class_exists('Production'))
 		} // END public function add_meta_boxes()
 
 		/**
-		 * called off of the add meta box
-		 */
+     * called off of the add meta box
+     */
 		public function add_inner_meta_boxes($post)
 		{
 			// Render the job order metabox
@@ -143,8 +145,8 @@ if(!class_exists('Production'))
 		} // END public function add_inner_meta_boxes($post)
 
 		/**
-		 * hook into WP's activation registration hook
-		 */
+     * hook into WP's activation registration hook
+     */
 		function activation() {
 			// First, we "add" the custom post type via the above written function.
 			// Note: "add" is written with quotes, as CPTs don't get added to the DB,
