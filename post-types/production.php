@@ -59,7 +59,7 @@ if(!class_exists('Production'))
 				'slug'                => self::POST_TYPE_PLURAL,
 				'with_front'          => true,
 				'pages'               => true,
-				'feeds'              	=> true,
+				'feeds'               => true,
 			);
 
 			$args = array(
