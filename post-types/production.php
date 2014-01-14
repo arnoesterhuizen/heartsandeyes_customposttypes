@@ -26,6 +26,7 @@ if(!class_exists('Production'))
 		{
 			// Initialize Post Type
 			$this->create_post_type();
+			$this->create_taxonomies();
 			add_action('save_post', array(&$this, 'save_post'));
 		} // END public function init()
 
@@ -49,7 +50,37 @@ if(!class_exists('Production'))
 				)
 			);
 		}
-	
+
+		/**
+		 * Create taxonomies
+		 */
+		public function create_taxonomies() {
+			$labels = array(
+				'name'              => _x( 'Categories', 'taxonomy general name' ),
+				'singular_name'     => _x( 'Category', 'taxonomy singular name' ),
+				'search_items'      => __( 'Search Categories' ),
+				'all_items'         => __( 'All Categories' ),
+				'parent_item'       => __( 'Parent Category' ),
+				'parent_item_colon' => __( 'Parent Category:' ),
+				'edit_item'         => __( 'Edit Category' ),
+				'update_item'       => __( 'Update Category' ),
+				'add_new_item'      => __( 'Add New Category' ),
+				'new_item_name'     => __( 'New Category Name' ),
+				'menu_name'         => __( 'Category' ),
+			);
+
+			$args = array(
+				'hierarchical'      => true,
+				'labels'            => $labels,
+				'show_ui'           => true,
+				'show_admin_column' => true,
+				'query_var'         => true,
+				'rewrite'           => array( 'slug' => 'post-type-category' ),
+			);
+
+			register_taxonomy( 'post-type-category', array( self::POST_TYPE ), $args );
+		} // END public function create_taxonomies()
+
 		/**
 		 * Save the metaboxes for this custom post type
 		 */
