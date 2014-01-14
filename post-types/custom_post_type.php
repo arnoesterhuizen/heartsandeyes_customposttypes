@@ -19,7 +19,8 @@ if(!class_exists('CustomPostType'))
 			add_action('init', array(&$this, 'init'));
 			add_action('admin_init', array(&$this, 'admin_init'));
 
-			register_activation_hook( __FILE__ , array(&$this, 'activation'));
+			register_activation_hook(__FILE__, array('WP_HeartsAndEyes_Plugin', 'activate'));
+			register_deactivation_hook(__FILE__, array('WP_HeartsAndEyes_Plugin', 'deactivate'));
 		} // END public function __construct()
 
 		/**
@@ -186,7 +187,7 @@ if(!class_exists('CustomPostType'))
 		/**
 		 * hook into WP's activation registration hook
 		 */
-		function activation() {
+		function activate() {
 			// First, we "add" the custom post type via the above written function.
 			// Note: "add" is written with quotes, as CPTs don't get added to the DB,
 			// They are only referenced in the post_type column with a post entry,
@@ -195,6 +196,13 @@ if(!class_exists('CustomPostType'))
 
 			// ATTENTION: This is *only* done during plugin activation hook in this example!
 			// You should *NEVER EVER* do this on every page load!!
+			flush_rewrite_rules();
+		}
+
+		/**
+		 * hook into WP's deactivation registration hook
+		 */
+		function deactivate() {
 			flush_rewrite_rules();
 		}
 	} // END class CustomPostType
