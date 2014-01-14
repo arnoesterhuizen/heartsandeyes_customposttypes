@@ -2,8 +2,8 @@
 if(!class_exists('Person'))
 {
 	/**
-   * A Person class that provides 3 additional meta fields
-   */
+	 * A Person class that provides 3 additional meta fields
+	 */
 	class Person
 	{
 		const POST_TYPE          = "person";
@@ -12,8 +12,8 @@ if(!class_exists('Person'))
 		protected $_taxonomies   = array('role' => 'roles' );
 
 		/**
-     * The Constructor
-     */
+		 * The Constructor
+		 */
 		public function __construct()
 		{
 			// register actions
@@ -24,8 +24,8 @@ if(!class_exists('Person'))
 		} // END public function __construct()
 
 		/**
-     * hook into WP's init action hook
-     */
+		 * hook into WP's init action hook
+		 */
 		public function init()
 		{
 			// Initialize Post Type
@@ -35,8 +35,8 @@ if(!class_exists('Person'))
 		} // END public function init()
 
 		/**
-     * Create the post type
-     */
+		 * Create the post type
+		 */
 		public function create_post_type()
 		{
 			$labels = array(
@@ -81,8 +81,8 @@ if(!class_exists('Person'))
 		}
 
 		/**
-     * Create taxonomies
-     */
+		 * Create taxonomies
+		 */
 		public function create_taxonomies() {
 			foreach($this->_taxonomies as $taxonomy => $taxonomy_plural)
 			{
@@ -91,6 +91,9 @@ if(!class_exists('Person'))
 			}
 		} // END public function create_taxonomies()
 
+		/**
+		 * Create a single taxonomy
+		 */
 		public function create_taxonomy($taxonomy, $taxonomy_plural) {
 			$labels = array(
 				'name'                       => _x( ucwords(str_replace("_", " ", $taxonomy_plural)), 'taxonomy general name' ),
@@ -124,8 +127,8 @@ if(!class_exists('Person'))
 		} // END public function create_taxonomy()
 
 		/**
-     * Save the metaboxes for this custom post type
-     */
+		 * Save the metaboxes for this custom post type
+		 */
 		public function save_post($post_id)
 		{
 			// verify if this is an auto save routine.
@@ -150,8 +153,8 @@ if(!class_exists('Person'))
 		} // END public function save_post($post_id)
 
 		/**
-     * hook into WP's admin_init action hook
-     */
+		 * hook into WP's admin_init action hook
+		 */
 		public function admin_init()
 		{
 			// Add metaboxes
@@ -159,8 +162,8 @@ if(!class_exists('Person'))
 		} // END public function admin_init()
 
 		/**
-     * hook into WP's add_meta_boxes action hook
-     */
+		 * hook into WP's add_meta_boxes action hook
+		 */
 		public function add_meta_boxes()
 		{
 			// Add this metabox to every selected post
@@ -173,8 +176,8 @@ if(!class_exists('Person'))
 		} // END public function add_meta_boxes()
 
 		/**
-     * called off of the add meta box
-     */
+		 * called off of the add meta box
+		 */
 		public function add_inner_meta_boxes($post)
 		{
 			// Render the job order metabox
@@ -182,8 +185,8 @@ if(!class_exists('Person'))
 		} // END public function add_inner_meta_boxes($post)
 
 		/**
-     * hook into WP's activation registration hook
-     */
+		 * hook into WP's activation registration hook
+		 */
 		function activation() {
 			// First, we "add" the custom post type via the above written function.
 			// Note: "add" is written with quotes, as CPTs don't get added to the DB,
