@@ -19,8 +19,8 @@ if(!class_exists('CustomPostType'))
 			add_action('init', array(&$this, 'init'));
 			add_action('admin_init', array(&$this, 'admin_init'));
 
-			register_activation_hook(__FILE__, array('WP_HeartsAndEyes_Plugin', 'activate'));
-			register_deactivation_hook(__FILE__, array('WP_HeartsAndEyes_Plugin', 'deactivate'));
+			register_activation_hook(__FILE__, array(&$this, 'activate'));
+			register_deactivation_hook(__FILE__, array(&$this, 'deactivate'));
 		} // END public function __construct()
 
 		/**
