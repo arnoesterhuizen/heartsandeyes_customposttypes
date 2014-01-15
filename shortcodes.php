@@ -17,7 +17,7 @@ if(!class_exists('HeartsAndEyes_CustomShortcodes'))
 		 */
 		public function init()
 		{
-			add_filter( 'img_caption_shortcode', array(&$this, 'img_caption_shortcode', 10, 3 ) );
+			add_filter( 'img_caption_shortcode', array($this, 'img_caption_shortcode' ) , 10, 3 );
 
 			add_shortcode( 'production', array(&$this, 'define_shortcode_productions' ) );
 			add_shortcode( 'person',     array(&$this, 'define_shortcode_people' ) );
@@ -149,7 +149,7 @@ if(!class_exists('HeartsAndEyes_CustomShortcodes'))
 			return '<span class="' . $shortcode . '">' . do_shortcode( $content ) . '</span>';
 		}
 
-		function img_caption_shortcode( $empty, $attr, $content = null ) {
+		public function img_caption_shortcode( $empty, $attr, $content = null ) {
 			// New-style shortcode with the caption inside the shortcode with the link and image tags.
 			if ( ! isset( $attr['caption'] ) ) {
 				if ( preg_match( '#((?:<a [^>]+>\s*)?<img [^>]+>(?:\s*</a>)?)(.*)#is', $content, $matches ) ) {
