@@ -12,7 +12,7 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes_Settings'))
 			add_action('admin_init', array(&$this, 'admin_init'));
 			add_action('admin_menu', array(&$this, 'add_menu'));
 		} // END public function __construct
-		
+
 		/**
 		 * hook into WP's admin_init action hook
 		 */
@@ -29,7 +29,7 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes_Settings'))
 				array(&$this, 'settings_section_heartsandeyes_customposttypes'),
 				'heartsandeyes_customposttypes'
 			);
-			
+
 			// add your setting's fields
 //			add_settings_field(
 //				'heartsandeyes_customposttypes-setting_a',
@@ -53,13 +53,13 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes_Settings'))
 //			);
 			// Possibly do additional admin_init tasks
 		} // END public static function activate
-		
+
 		public function settings_section_heartsandeyes_customposttypes()
 		{
 			// Think of this as help text for the section.
 			echo 'These settings do things for the Hearts & Eyes Custom Post Types.';
 		}
-		
+
 		/**
 		 * This function provides text inputs for settings fields
 		 */
@@ -72,10 +72,10 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes_Settings'))
 			// echo a proper input type="text"
 			echo sprintf('<input type="text" name="%s" id="%s" value="%s" />', $field, $field, $value);
 		} // END public function settings_field_input_text($args)
-		
+
 		/**
 		 * add a menu
-		 */		
+		 */
 		public function add_menu()
 		{
 			// Add a page to manage this plugin's settings
@@ -87,17 +87,17 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes_Settings'))
 				array(&$this, 'plugin_settings_page')
 			);
 		} // END public function add_menu()
-	
+
 		/**
 		 * Menu Callback
-		 */		
+		 */
 		public function plugin_settings_page()
 		{
 			if(!current_user_can('manage_options'))
 			{
 				wp_die(__('You do not have sufficient permissions to access this page.'));
 			}
-	
+
 			// Render the settings template
 			include(sprintf("%s/templates/settings.php", dirname(__FILE__)));
 		} // END public function plugin_settings_page()
