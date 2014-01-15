@@ -17,6 +17,8 @@ if(!class_exists('HeartsAndEyes_CustomShortcodes'))
 		 */
 		public function init()
 		{
+			add_filter( 'img_caption_shortcode', array(&$this, 'img_caption_shortcode', 10, 3 ) );
+
 			add_shortcode( 'production', array(&$this, 'define_shortcode_productions' ) );
 			add_shortcode( 'person',     array(&$this, 'define_shortcode_people' ) );
 			add_shortcode( 'page',       array(&$this, 'define_shortcode_pages' ) );
@@ -145,6 +147,40 @@ if(!class_exists('HeartsAndEyes_CustomShortcodes'))
 			}
 
 			return '<span class="' . $shortcode . '">' . do_shortcode( $content ) . '</span>';
+		}
+
+		function img_caption_shortcode( $empty, $attr, $content = null ) {
+			// New-style shortcode with the caption inside the shortcode with the link and image tags.
+			if ( ! isset( $attr['caption'] ) ) {
+				if ( preg_match( '#((?:<a [^>]+>\s*)?<img [^>]+>(?:\s*</a>)?)(.*)#is', $content, $matches ) ) {
+					$content = $matches[1];
+					$attr['caption'] = trim( $matches[2] );
+				}
+			}
+
+			$atts = shortcode_atts( array(
+				'id'      => '',
+				'align'   => 'alignnone',
+				'width'   => '',
+				'caption' => ''
+			), $attr, 'caption' );
+
+			$atts['width'] = (int) $atts['width'];
+			if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
+				return $content;
+
+			if ( ! empty( $atts['id'] ) )
+				$atts['id'] = 'id="' . esc_attr( $atts['id'] ) . '" ';
+
+			$caption_width = $atts['width'];
+			$caption_width = apply_filters( 'img_caption_shortcode_width', $caption_width, $atts, $content );
+
+			$style = '';
+			if ( $caption_width )
+				$style = 'style="max-width: ' . (int) $caption_width . 'px" ';
+
+			return '<div ' . $atts['id'] . $style . 'class="wp-caption ' . esc_attr( $atts['align'] ) . '">'
+			. do_shortcode( $content ) . '<p class="wp-caption-text">' . do_shortcode( $atts['caption'] ) . '</p></div>';
 		}
 	} // END class HeartsAndEyes_CustomShortcodes
 } // END if(!class_exists('HeartsAndEyes_CustomShortcodes'))

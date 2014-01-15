@@ -32,6 +32,8 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 
 			$plugin = plugin_basename(__FILE__);
 			add_filter("plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ));
+
+			add_action( 'dashboard_glance_items', array( $this, 'admin_dashboard_widget' ) );
 		} // END public function __construct
 
 		/**
@@ -55,12 +57,49 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 		} // END public static function deactivate
 
 		// Add the settings link to the plugins page
-		function plugin_settings_link($links)
+		public function plugin_settings_link($links)
 		{
 			$settings_link = '<a href="options-general.php?page=heartsandeyes_customposttypes">Settings</a>';
 			array_unshift($links, $settings_link);
 			return $links;
-		}
+		} // END public function plugin_settings_link
+
+		/**
+		 * Add custom taxonomies and custom post types counts to dashboard
+		 */
+		public function admin_dashboard_widget () {
+			$args = array(
+				'public' => true ,
+				'_builtin' => false
+			);
+
+			$output = 'object';
+			$operator = 'and';
+
+			$post_types = get_post_types( $args , $output , $operator );
+			echo "</ul><ul>";
+			foreach( $post_types as $post_type ) {
+				if ( current_user_can( 'edit_posts' ) ) {
+					$num_posts = wp_count_posts( $post_type->name );
+					$num = number_format_i18n ( intval( $num_posts->publish ) );
+					$text = _n( $post_type->labels->singular_name, $post_type->labels->name , $num );
+
+					printf( '<li class="page-count"><a href="edit.php?post_type=%1$s">%3$s %2$s</a></li>', $post_type->name, $text, $num );
+				}
+			}
+
+			$taxonomies = get_taxonomies( $args , $output , $operator );
+			foreach( $taxonomies as $taxonomy ) {
+				if ( current_user_can( 'manage_categories' ) ) {
+					$num_terms  = wp_count_terms( $taxonomy->name );
+					$num = number_format_i18n ( intval( $num_terms ) );
+					$text = _n( $taxonomy->labels->name, $taxonomy->labels->name , ( intval( $num_terms ) ) );
+
+					printf( '<li><a href="edit-tags.php?taxonomy=%1$s">%3$s %2$s</a></li>', $taxonomy->name, $text, $num );
+				}
+			}
+			return;
+		} // END public function admin_dashboard_widget
 
 	} // END class HeartsAndEyes_CustomPostTypes
 } // END if(!class_exists('HeartsAndEyes_CustomPostTypes'))
