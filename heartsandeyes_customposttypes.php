@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Hearts and Eyes Custom Post Types
-Plugin URI: https://github.com/arnoesterhuizen/wp_heartsandeyes_plugin
+Plugin URI: https://github.com/arnoesterhuizen/heartsandeyes_customposttypes
 Description: Declares a plugin that will create custom post types for Hearts and Eyes.
 Version: 1.1
 Author: Arno Esterhuizen
