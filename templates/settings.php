@@ -1,10 +1,10 @@
 <div class="wrap">
-    <h2>WP Hearts & Eyes Plugin</h2>
+	<h2>Hearts &amp; Eyes Custom Post Types</h2>
     <form method="post" action="options.php"> 
-        <?php @settings_fields('wp_heartsandeyes_plugin-group'); ?>
-        <?php @do_settings_fields('wp_heartsandeyes_plugin-group'); ?>
+		<?php @settings_fields('heartsandeyes_customposttypes-group'); ?>
+		<?php @do_settings_fields('heartsandeyes_customposttypes-group'); ?>
 
-        <?php do_settings_sections('wp_heartsandeyes_plugin'); ?>
+		<?php do_settings_sections('heartsandeyes_customposttypes'); ?>
 
         <?php @submit_button(); ?>
     </form>
