@@ -3,7 +3,7 @@
 Plugin Name: Hearts and Eyes Custom Post Types
 Plugin URI: https://github.com/arnoesterhuizen/wp_heartsandeyes_plugin
 Description: Declares a plugin that will create custom post types for Hearts and Eyes.
-Version: 1.0
+Version: 1.1
 Author: Arno Esterhuizen
 Author URI: https://www.facebook.com/arno.esterhuizen
 License: GPLv2
@@ -27,6 +27,8 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 			$Production = new Production();
 			require_once(sprintf("%s/post-types/person.php", dirname(__FILE__)));
 			$Person = new Person();
+			require_once(sprintf("%s/shortcodes.php", dirname(__FILE__)));
+			$HeartsAndEyes_CustomShortcodes = new HeartsAndEyes_CustomShortcodes();
 
 			$plugin = plugin_basename(__FILE__);
 			add_filter("plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ));
