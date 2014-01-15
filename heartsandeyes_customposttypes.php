@@ -41,9 +41,6 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 		 */
 		public static function activate()
 		{
-			// ATTENTION: This is *only* done during plugin activation hook in this example!
-			// You should *NEVER EVER* do this on every page load!!
-			flush_rewrite_rules();
 		} // END public static function activate
 
 		/**
@@ -51,9 +48,6 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 		 */
 		public static function deactivate()
 		{
-			// ATTENTION: This is *only* done during plugin activation hook in this example!
-			// You should *NEVER EVER* do this on every page load!!
-			flush_rewrite_rules();
 		} // END public static function deactivate
 
 		// Add the settings link to the plugins page
@@ -106,11 +100,13 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 
 if(class_exists('HeartsAndEyes_CustomPostTypes'))
 {
-	// Installation and uninstallation hooks
-	register_activation_hook(__FILE__, array('HeartsAndEyes_CustomPostTypes', 'activate'));
-	register_deactivation_hook(__FILE__, array('HeartsAndEyes_CustomPostTypes', 'deactivate'));
-
 	// instantiate the plugin class
 	$heartsandeyes_customposttypes = new HeartsAndEyes_CustomPostTypes();
 
+	// Installation and uninstallation hooks
+	register_activation_hook(__FILE__, array('HeartsAndEyes_CustomPostTypes', 'activate'));
+	register_activation_hook(__FILE__, 'flush_rewrite_rules');
+	
+	register_deactivation_hook(__FILE__, array('HeartsAndEyes_CustomPostTypes', 'deactivate'));
+	register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
 }
