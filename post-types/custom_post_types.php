@@ -4,17 +4,36 @@ if(!class_exists('CustomPostTypes'))
 	/**
 	 * A Person class that provides 3 additional meta fields
 	 */
-	abstract class CustomPostTypes
+	class CustomPostTypes
 	{
-		protected $_meta         = array();
-		protected $_taxonomies   = array();
-		protected $_menu_icon    = '';
+		protected $_post_type        = '';
+		protected $_post_type_plural = '';
+		protected $_meta             = array();
+		protected $_taxonomies       = array();
+		protected $_menu_icon        = '';
 
 		/**
 		 * The Constructor
+		 * @param array Post type array('singular' => 'plural')
+		 * @param array Taxonomy array('singular' => 'plural')
+		 * @param string icon name
 		 */
-		public function __construct()
+		public function __construct($post_type, $taxonomies = array(), $menu_icon = '' )
 		{
+			foreach ($post_type as $singular => $plural) {
+				$this->_post_type = $singular;
+				$this->_post_type_plural = $plural;
+				break;
+			}
+
+			if (is_array($taxonomies)) {
+				$this->_taxonomies = $taxonomies;
+			}
+
+			if (is_string($menu_icon)) {
+				$this->_menu_icon = $menu_icon;
+			}
+
 			// register actions
 			add_action('init', array(&$this, 'init'));
 			add_action('admin_init', array(&$this, 'admin_init'));
@@ -37,30 +56,30 @@ if(!class_exists('CustomPostTypes'))
 		public function create_post_type()
 		{
 			$labels = array(
-				'name'                => __(ucwords(str_replace("_", " ", $this::POST_TYPE_PLURAL))),
-				'singular_name'       => __(ucwords(str_replace("_", " ", $this::POST_TYPE))),
-				'menu_name'           => __(ucwords(str_replace("_", " ", $this::POST_TYPE_PLURAL))),
+				'name'                => __(ucwords(str_replace("_", " ", $this->_post_type_plural))),
+				'singular_name'       => __(ucwords(str_replace("_", " ", $this->_post_type))),
+				'menu_name'           => __(ucwords(str_replace("_", " ", $this->_post_type_plural))),
 				'parent_item_colon'   => __( '' ),
-				'all_items'           => __(sprintf('All %s', ucwords(str_replace("_", " ", $this::POST_TYPE_PLURAL)))),
-				'view_item'           => __(sprintf('View %s', ucwords(str_replace("_", " ", $this::POST_TYPE)))),
-				'add_new_item'        => __(sprintf('Add New %s', ucwords(str_replace("_", " ", $this::POST_TYPE)))),
+				'all_items'           => __(sprintf('All %s', ucwords(str_replace("_", " ", $this->_post_type_plural)))),
+				'view_item'           => __(sprintf('View %s', ucwords(str_replace("_", " ", $this->_post_type)))),
+				'add_new_item'        => __(sprintf('Add New %s', ucwords(str_replace("_", " ", $this->_post_type)))),
 				'add_new'             => __( 'Add New' ),
-				'edit_item'           => __(sprintf('Edit %s', ucwords(str_replace("_", " ", $this::POST_TYPE)))),
-				'update_item'         => __(sprintf('Update %s', ucwords(str_replace("_", " ", $this::POST_TYPE)))),
-				'search_items'        => __(sprintf('Search %s', ucwords(str_replace("_", " ", $this::POST_TYPE_PLURAL)))),
-				'not_found'           => __(sprintf('No %s found', str_replace("_", " ", $this::POST_TYPE_PLURAL))),
-				'not_found_in_trash'  => __(sprintf('No %s found in Trash', str_replace("_", " ", $this::POST_TYPE_PLURAL)))
+				'edit_item'           => __(sprintf('Edit %s', ucwords(str_replace("_", " ", $this->_post_type)))),
+				'update_item'         => __(sprintf('Update %s', ucwords(str_replace("_", " ", $this->_post_type)))),
+				'search_items'        => __(sprintf('Search %s', ucwords(str_replace("_", " ", $this->_post_type_plural)))),
+				'not_found'           => __(sprintf('No %s found', str_replace("_", " ", $this->_post_type_plural))),
+				'not_found_in_trash'  => __(sprintf('No %s found in Trash', str_replace("_", " ", $this->_post_type_plural)))
 			);
 
 			$rewrite = array(
-				'slug'                => $this::POST_TYPE_PLURAL,
+				'slug'                => $this->_post_type_plural,
 				'with_front'          => true,
 				'pages'               => true,
 				'feeds'               => true,
 			);
 
 			$args = array(
-				'description'         => __(sprintf('%s information pages', ucwords(str_replace("_", " ", $this::POST_TYPE)))),
+				'description'         => __(sprintf('%s information pages', ucwords(str_replace("_", " ", $this->_post_type)))),
 				'labels'              => $labels,
 				'supports'            => array( 'title', 'editor', 'thumbnail', 'revisions', 'custom-fields', 'page-attributes' ),
 				'public'              => true,
@@ -74,7 +93,7 @@ if(!class_exists('CustomPostTypes'))
 				'capability_type'     => 'page',
 			);
 
-			register_post_type( $this::POST_TYPE, $args );
+			register_post_type( $this->_post_type, $args );
 		}
 
 		/**
@@ -120,7 +139,7 @@ if(!class_exists('CustomPostTypes'))
 				'show_tagcloud'         => true,
 			);
 
-			register_taxonomy( $taxonomy_plural, array( $this::POST_TYPE ), $args );
+			register_taxonomy( $taxonomy_plural, array( $this->_post_type ), $args );
 		} // END public function create_taxonomy()
 
 		/**
@@ -135,7 +154,7 @@ if(!class_exists('CustomPostTypes'))
 				return;
 			}
 
-			if($_POST['post_type'] == $this::POST_TYPE && current_user_can('edit_post', $post_id))
+			if($_POST['post_type'] == $this->_post_type && current_user_can('edit_post', $post_id))
 			{
 				foreach($this->_meta as $field_name)
 				{
@@ -146,7 +165,7 @@ if(!class_exists('CustomPostTypes'))
 			else
 			{
 				return;
-			} // if($_POST['post_type'] == $this::POST_TYPE && current_user_can('edit_post', $post_id))
+			} // if($_POST['post_type'] == $this->_post_type && current_user_can('edit_post', $post_id))
 		} // END public function save_post($post_id)
 
 		/**
@@ -165,10 +184,10 @@ if(!class_exists('CustomPostTypes'))
 		{
 			// Add this metabox to every selected post
 			add_meta_box(
-				sprintf('heartsandeyes_customposttypes_%s_section', $this::POST_TYPE),
-				sprintf('%s Information', ucwords(str_replace("_", " ", $this::POST_TYPE))),
+				sprintf('heartsandeyes_customposttypes_%s_section', $this->_post_type),
+				sprintf('%s Information', ucwords(str_replace("_", " ", $this->_post_type))),
 				array(&$this, 'add_inner_meta_boxes'),
-				$this::POST_TYPE
+				$this->_post_type
 			);
 		} // END public function add_meta_boxes()
 
@@ -178,19 +197,17 @@ if(!class_exists('CustomPostTypes'))
 		public function add_inner_meta_boxes($post)
 		{
 			// Render the job order metabox
-			include(sprintf("%s/../templates/%s_metabox.php", dirname(__FILE__), $this::POST_TYPE));
+			include(sprintf("%s/../templates/%s_metabox.php", dirname(__FILE__), $this->_post_type));
 		} // END public function add_inner_meta_boxes($post)
 
 		/**
 		 * hook into WP's activation registration hook
 		 */
-		function activate() {
-		}
+		function activate() {}
 
 		/**
 		 * hook into WP's deactivation registration hook
 		 */
-		function deactivate() {
-		}
+		function deactivate() {}
 	} // END class CustomPostType
 } // END if(!class_exists('CustomPostType'))

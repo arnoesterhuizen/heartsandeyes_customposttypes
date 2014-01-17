@@ -23,10 +23,10 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 			$HeartsAndEyes_CustomPostTypes_Settings = new HeartsAndEyes_CustomPostTypes_Settings();
 
 			// Register custom post types
-			require_once(sprintf("%s/post-types/production.php", dirname(__FILE__)));
-			$Production = new Production();
-			require_once(sprintf("%s/post-types/person.php", dirname(__FILE__)));
-			$Person = new Person();
+			require_once(sprintf("%s/post-types/custom_post_types.php", dirname(__FILE__)));
+			$Production = new CustomPostTypes(array('production' => 'productions'), array(), 'dashicons-exerpt-view');
+			$Person     = new CustomPostTypes(array('person' => 'people'), array('role' => 'roles'), 'dashicons-admin-users');
+
 			require_once(sprintf("%s/shortcodes.php", dirname(__FILE__)));
 			$HeartsAndEyes_CustomShortcodes = new HeartsAndEyes_CustomShortcodes();
 
