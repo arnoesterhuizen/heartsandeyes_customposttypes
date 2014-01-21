@@ -1,74 +1,1 @@
-/* Alignment */
-
-aside.alignleft,
-blockquote.alignleft,
-img.alignleft {
-	margin: 7px 24px 7px 0;
-}
-
-aside.alignright,
-blockquote.alignright,
-img.alignright {
-	margin: 7px 0 7px 24px;
-}
-
-aside.aligncenter,
-blockquote.aligncenter,
-img.aligncenter,
-.wp-caption.aligncenter {
-	margin-top: 7px;
-	margin-bottom: 7px;
-}
-
-.site-content aside.alignleft,
-.site-content aside.alignright,
-.site-content blockquote.alignleft,
-.site-content blockquote.alignright {
-	border-top: 1px solid rgba(0, 0, 0, 0.1);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-	padding-top: 17px;
-	width: 50%;
-}
-
-.site-content aside.alignleft p,
-.site-content aside.alignright p,
-.site-content blockquote.alignleft p,
-.site-content blockquote.alignright p {
-	margin-bottom: 17px;
-}
-
-.entry-content .production {
-	font-style: italic;
-}
-
-/**
- * 11.0 Media Queries
- * -----------------------------------------------------------------------------
- */
-
-/* Does the same thing as <meta name="viewport" content="width=device-width">,
- * but in the future W3C standard way. -ms- prefix is required for IE10+ to
- * render responsive styling in Windows 8 "snapped" views; IE10+ does not honor
- * the meta tag. See http://core.trac.wordpress.org/ticket/25888.
- */
-
-@media screen and (max-width: 810px) {
-	.wp-caption {
-		width: 35%;
-	}
-}
-
-@media screen and (max-width: 400px) {
-	.list-view .site-content .post-thumbnail {
-		height: 0;
-		background-position: 50% 30%;
-	}
-}
-
-@media screen and (min-width: 783px) {
-	.entry-content a {
-		color: #555;
-		border-bottom: 1px dotted #ccc;
-		text-decoration: none;
-	}
-}
+aside.aside-extract {	border: 1px solid rgba(0, 0, 0, 0.1);	background: #fff;	border-radius: 3px;	padding: 0.5em;	width: 50%;	margin: 7px 0 7px 24px;}aside.aside-extract:hover {	border: 1px solid rgba(0, 0, 0, 0.2);	background: rgba(0, 0, 0, 0.1);}aside.aside-extract img {	float: left;}aside.aside-extract h1,aside.aside-extract p {	font-size: 0.7em;	float: left;	clear: right;	margin: 0 0 0 1em;	max-width: calc(100% - 64px - 1em);}aside.aside-extract a {	color: #555 !important;	text-decoration: none !important;	border: none !important;}span.production, a.production {	font-style: italic;}
