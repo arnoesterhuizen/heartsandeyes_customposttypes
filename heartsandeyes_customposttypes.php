@@ -27,9 +27,14 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 			$Production = new CustomPostTypes(array('production' => 'productions'), array(), 'dashicons-exerpt-view');
 			$Person     = new CustomPostTypes(array('person' => 'people'), array('role' => 'roles'), 'dashicons-admin-users');
 
+			// Register shortcodes
 			require_once(sprintf("%s/shortcodes.php", dirname(__FILE__)));
 			$HeartsAndEyes_CustomShortcodes = new HeartsAndEyes_CustomShortcodes();
 
+			// Register stylesheet
+			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
+
+			// Register settings pages
 			$plugin = plugin_basename(__FILE__);
 			add_filter("plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ));
 
@@ -49,6 +54,14 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 		public static function deactivate()
 		{
 		} // END public static function deactivate
+
+		/**
+		 * Register and enqueue style sheet.
+		 */
+		public function register_plugin_styles() {
+			wp_register_style( 'heartsandeyes_customposttypes', plugins_url( 'heartsandeyes_customposttypes/assets/hne_cpt.css' ) );
+			wp_enqueue_style( 'heartsandeyes_customposttypes' );
+		}
 
 		// Add the settings link to the plugins page
 		public function plugin_settings_link($links)
