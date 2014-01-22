@@ -18,10 +18,6 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 		 */
 		public function __construct()
 		{
-			// Initialize Settings
-			require_once(sprintf("%s/settings.php", dirname(__FILE__)));
-			$HeartsAndEyes_CustomPostTypes_Settings = new HeartsAndEyes_CustomPostTypes_Settings();
-
 			// Register custom post types
 			require_once(sprintf("%s/post-types/custom_post_types.php", dirname(__FILE__)));
 			$Production = new CustomPostTypes(array('production' => 'productions'), array(), 'dashicons-exerpt-view');
@@ -33,10 +29,6 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 
 			// Register stylesheet
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
-
-			// Register settings pages
-			$plugin = plugin_basename(__FILE__);
-			add_filter("plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ));
 
 			add_action( 'dashboard_glance_items', array( $this, 'admin_dashboard_widget' ) );
 		} // END public function __construct
@@ -62,14 +54,6 @@ if(!class_exists('HeartsAndEyes_CustomPostTypes'))
 			wp_register_style( 'heartsandeyes_customposttypes', plugins_url( 'heartsandeyes_customposttypes/assets/hne_cpt.css' ) );
 			wp_enqueue_style( 'heartsandeyes_customposttypes' );
 		}
-
-		// Add the settings link to the plugins page
-		public function plugin_settings_link($links)
-		{
-			$settings_link = '<a href="options-general.php?page=heartsandeyes_customposttypes">Settings</a>';
-			array_unshift($links, $settings_link);
-			return $links;
-		} // END public function plugin_settings_link
 
 		/**
 		 * Add custom taxonomies and custom post types counts to dashboard
